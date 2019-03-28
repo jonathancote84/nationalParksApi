@@ -38,16 +38,19 @@ function getNationalPark(query, maxResults=10) {
             }
             throw new Error(response.statusText) ;
         })
-        //this does something; in this case console.log the response
+        //this calls displayResults(responseJson) allow that function to do something with the fetch results; in this case console.log the response
         .then( responseJson => displayResults(responseJson))
         .catch( err => {
+            //if something goes wrong we catch and display that error message
             $( '#js-error-message' ).text(`Something went wrong: ${err.message}`);
 
         });
 }
 
 function displayResults(responseJson) {
+    //display responseJson
     console.log(responseJson);
+    //empty the previous results
     $('#results-list').empty();
     //iterate through the items array data 
     for (let i = 0; i < responseJson.data.length; i++) {
@@ -61,15 +64,19 @@ function displayResults(responseJson) {
             <a href="${responseJson.data[i].url}">${responseJson.data[i].url}</a></li>`
 
         )};
-        //display the results section
+        //display the results section by removing the class hidden
+        // .show() or .toggleClass('hidden') also works just fine
         $('#results').removeClass('hidden');
 }
 //event listner for the submit button
 function watchForm() {
     $( 'form' ).submit(event => {
+        //prevents default action of submit button
         event.preventDefault();
+        //does this instead, stores values as const 
         const searchTerm = $('#js-search-term').val();
         const maxResults = $('#js-max-results').val();
+        //call function with those const variables
         getNationalPark(searchTerm, maxResults);
     })
 }
